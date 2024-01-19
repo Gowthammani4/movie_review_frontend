@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'ui/login.dart';
+import 'package:spring_boot_test/ui/home.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
           seedColor: const Color.fromRGBO(32, 63, 129, 1.0),
         ),
       ),
-      home: const Login(),
+      home: Home(),
     );
   }
 }
