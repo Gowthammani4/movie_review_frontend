@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -27,20 +29,13 @@ class _HomeState extends State<Home> {
     String url = "https://movie-review-3gg6.onrender.com/api/movies";
     final response = await http.get(Uri.parse(url));
     var responseData = jsonDecode(response.body);
-    var res = json.decode(response.body);
     List<Map<String, dynamic>> m = [];
-    print("The res type is ${res.runtimeType}");
     for (var i in responseData) {
       m.add(i);
     }
-
-    print("The type of response data ${responseData.runtimeType}");
-    print("The type of m: ");
-    print(m.runtimeType);
-    print(m);
-    movies = m;
-    print(movies[3]["title"]);
-    print(movies[0]["poster"]);
+    setState(() {
+      movies = m;
+    });
   }
 
   @override
@@ -74,63 +69,106 @@ class _HomeState extends State<Home> {
           )
         ],
       ),
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: GestureDetector(
-        onTap: () => setState(() {}),
-        child: Container(
-          child: ListView.builder(
-            itemCount: movies.length,
-            itemBuilder: (context, position) {
-              return Container(
-                height: 300,
-                child: GestureDetector(
-                  child: Card(
-                    child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          children: [
-                            ClipRRect(
-                                child: Image(
-                              image: NetworkImage(movies[position]["poster"]),
-                              height: 300,
-                              width: 200,
-                              fit: BoxFit.contain,
-                            )),
-                            Container(
-                              child: Row(
-                                children: [
-                                  Text(movies[position]["title"]),
-                                  Text(movies[position]["genres"].toString()),
-                                  // Column(
-                                  //   children: [
-                                  //     for (String i in movies[position]["genres"])
-                                  //       Text(i)
-                                  //   ],
-                                  // ),
-                                  // Text(movies[position]["reviews"].length()),
-                                  const Column(
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: null,
-                                        child: Text("Play Trailer"),
-                                      ),
-                                      ElevatedButton(
-                                          onPressed: null,
-                                          child: Text("Reviews"))
-                                    ],
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        )),
-                  ),
+      backgroundColor: Colors.black,
+      // Theme.of(context).colorScheme.primary,
+      body: movies.isEmpty
+          ? GestureDetector(
+              onTap: () => setState(() {}),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.redAccent,
                 ),
-              );
-            },
-          ),
-        ),
-      ),
+              ),
+            )
+          : GestureDetector(
+              onTap: () => setState(() {}),
+              child: Container(
+                color: Colors.black,
+                child: ListView.builder(
+                  itemCount: movies.length,
+                  itemBuilder: (context, position) {
+                    return Container(
+                      height: 300,
+                      width: 300,
+                      child: GestureDetector(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                    child: Image(
+                                  image:
+                                      NetworkImage(movies[position]["poster"]),
+                                  height: 300,
+                                  width: 200,
+                                  fit: BoxFit.contain,
+                                )),
+                                Container(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        movies[position]["title"],
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Text(
+                                        movies[position]["genres"].toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      // Column(
+                                      //   children: [
+                                      //     for (String i in movies[position]["genres"])
+                                      //       Text(i)
+                                      //   ],
+                                      // ),
+                                      // Text(movies[position]["reviews"].length()),
+                                      const Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ElevatedButton(
+                                            clipBehavior: Clip.antiAlias,
+                                            onPressed: null,
+                                            child: Text("Play Trailer"),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                          ElevatedButton(
+                                              clipBehavior: Clip.hardEdge,
+                                              onPressed: null,
+                                              child: Text("Reviews"))
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
     );
   }
 }
