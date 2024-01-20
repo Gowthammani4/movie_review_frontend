@@ -1,13 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_local_variable
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:spring_boot_test/ui/youtubeplayer.dart';
 
 import 'login.dart';
-
-// import 'login.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -23,6 +22,16 @@ class _HomeState extends State<Home> {
     _allmovies();
   }
 
+  String removeBeforeEquals(String text) {
+    int equalsIndex = text.indexOf("=");
+    if (equalsIndex != -1) {
+      return text
+          .substring(equalsIndex + 1); // Start from the character after "="
+    } else {
+      return ""; // Return an empty string if no "=" is found
+    }
+  }
+
   List<Map<String, dynamic>> movies = [];
 
   Future<void> _allmovies() async {
@@ -36,6 +45,7 @@ class _HomeState extends State<Home> {
     setState(() {
       movies = m;
     });
+    print("fetched ${movies.length}");
   }
 
   @override
@@ -128,14 +138,7 @@ class _HomeState extends State<Home> {
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      // Column(
-                                      //   children: [
-                                      //     for (String i in movies[position]["genres"])
-                                      //       Text(i)
-                                      //   ],
-                                      // ),
-                                      // Text(movies[position]["reviews"].length()),
-                                      const Row(
+                                      Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         mainAxisAlignment:
@@ -143,7 +146,17 @@ class _HomeState extends State<Home> {
                                         children: [
                                           ElevatedButton(
                                             clipBehavior: Clip.antiAlias,
-                                            onPressed: null,
+                                            onPressed: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return VideoPlayerScreen(
+                                                      videoId: removeBeforeEquals(
+                                                          movies[position]
+                                                              ["trailerLink"]));
+                                                },
+                                              ),
+                                            ),
                                             child: Text("Play Trailer"),
                                           ),
                                           SizedBox(
