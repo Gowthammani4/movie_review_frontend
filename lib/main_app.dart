@@ -7,10 +7,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black
-            // const Color.fromRGBO(32, 63, 129, 1.0),
-            ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
       home: Home(),
     );

@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:spring_boot_test/ui/review_screen.dart';
 import 'package:spring_boot_test/ui/youtubeplayer.dart';
 
 import 'login.dart';
@@ -25,15 +26,14 @@ class _HomeState extends State<Home> {
   String removeBeforeEquals(String text) {
     int equalsIndex = text.indexOf("=");
     if (equalsIndex != -1) {
-      return text
-          .substring(equalsIndex + 1); // Start from the character after "="
+      return text.substring(equalsIndex + 1);
     } else {
-      return ""; // Return an empty string if no "=" is found
+      return "";
     }
   }
 
   List<Map<String, dynamic>> movies = [];
-
+  bool _loading = true;
   Future<void> _allmovies() async {
     String url = "https://movie-review-3gg6.onrender.com/api/movies";
     final response = await http.get(Uri.parse(url));
@@ -44,8 +44,8 @@ class _HomeState extends State<Home> {
     }
     setState(() {
       movies = m;
+      _loading = false;
     });
-    print("fetched ${movies.length}");
   }
 
   @override
@@ -80,8 +80,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       backgroundColor: Colors.black,
-      // Theme.of(context).colorScheme.primary,
-      body: movies.isEmpty
+      body: _loading
           ? GestureDetector(
               onTap: () => setState(() {}),
               child: Center(
@@ -165,10 +164,21 @@ class _HomeState extends State<Home> {
                                           ),
                                           ElevatedButton(
                                               clipBehavior: Clip.hardEdge,
-                                              onPressed: null,
+                                              onPressed: () => Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return reviewScreen(
+                                                            ImdbId: movies[
+                                                                    position -
+                                                                        1]
+                                                                ["imdbId"]);
+                                                      },
+                                                    ),
+                                                  ),
                                               child: Text("Reviews: " +
                                                   movies[position]["reviews"]
-                                                      .length))
+                                                      .toString()))
                                         ],
                                       )
                                     ],
