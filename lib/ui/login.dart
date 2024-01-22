@@ -27,26 +27,13 @@ class _LoginState extends State<Login> {
   bool _obscurePassword = true;
 
   Future<String> loggingIn(String email, String password) async {
-    print("sent");
-
     String url = "https://movie-review-3gg6.onrender.com/user/login";
     final response = await http.post(Uri.parse(url),
         body: json.encode({"email": email, "password": password}),
         headers: {'Content-Type': 'application/json'});
-    print("sent.......!");
-
     var responseData = json.decode(response.body);
     print(responseData);
-    print("success");
     return "success";
-  }
-
-  Future<void> allmovies() async {
-    String url = "https://movie-review-3gg6.onrender.com/api/movies";
-    final response = await http.get(Uri.parse(url));
-
-    var responseData = json.decode(response.body);
-    print(responseData);
   }
 
   @override
@@ -144,13 +131,14 @@ class _LoginState extends State<Login> {
                         print("password: $password");
                         print(email);
                         var a = await loggingIn(email, password);
-                        print(a);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return Home();
-                          }),
-                        );
+                        a == "success"
+                            ? Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) {
+                                  return Home();
+                                }),
+                              )
+                            : {_formKey.currentState?.reset(), setState(() {})};
                       }
                     },
                     child: const Text("Login"),
