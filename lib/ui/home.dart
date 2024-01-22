@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable, prefer_interpolation_to_compose_strings, unnecessary_null_comparison, unrelated_type_equality_checks
 
 import 'dart:convert';
-import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

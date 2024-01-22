@@ -7,7 +7,6 @@ import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 
 class reviewScreen extends StatefulWidget {
-  // List<Map<dynamic, dynamic>> reviewIds;
   String ImdbId;
 
   reviewScreen({required this.ImdbId, super.key});
@@ -29,7 +28,6 @@ class _reviewScreenState extends State<reviewScreen> {
         "https://movie-review-3gg6.onrender.com/api/reviews/findByImdbId/${imdbId}";
     final response = await http.post(Uri.parse(url));
     var responseData = jsonDecode(response.body);
-    print(responseData);
     List<Map<String, dynamic>> m = [];
     for (var i in responseData) {
       m.add(i);
@@ -58,7 +56,7 @@ class _reviewScreenState extends State<reviewScreen> {
                     itemCount: reviews.length,
                     itemBuilder: (context, position) {
                       return Card(
-                        child: Container(
+                        child: SizedBox(
                           height: 100,
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
