@@ -1,4 +1,9 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -9,6 +14,9 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  String email = "";
+  String password = "";
+  String userName = "";
 
   final FocusNode _focusNodeEmail = FocusNode();
   final FocusNode _focusNodePassword = FocusNode();
@@ -20,8 +28,16 @@ class _SignupState extends State<Signup> {
       TextEditingController();
 
   bool _obscurePassword = true;
-  String? email;
-  String? password;
+  Future<String> signingIn(email, password, userName) async {
+    String url = "https://movie-review-3gg6.onrender.com/user/register";
+    final response = await http.post(Uri.parse(url),
+        body: json.encode(
+            {"userName": userName, "email": email, "password": password}),
+        headers: {'Content-Type': 'application/json'});
+    var responseData = jsonDecode(response.body);
+    print(responseData);
+    return "Success";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +114,7 @@ class _SignupState extends State<Signup> {
                 obscureText: _obscurePassword,
                 focusNode: _focusNodePassword,
                 keyboardType: TextInputType.visiblePassword,
-                onSaved: (newValue) => email = newValue,
+                onSaved: (newValue) => email = newValue!,
                 decoration: InputDecoration(
                   labelText: "Password",
                   prefixIcon: const Icon(Icons.password_outlined),
@@ -131,8 +147,6 @@ class _SignupState extends State<Signup> {
               ),
               const SizedBox(height: 10),
               TextFormField(
-                onFieldSubmitted: (newValue) => password = newValue,
-                onSaved: (newValue) => password = newValue,
                 controller: _controllerConFirmPassword,
                 obscureText: _obscurePassword,
                 focusNode: _focusNodeConfirmPassword,
@@ -175,16 +189,12 @@ class _SignupState extends State<Signup> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
-                      print("email:");
-                      print(email);
-                      print(password);
+                    onPressed: () async {
+                      email = _controllerEmail.text;
+                      password = _controllerPassword.text;
+                      userName = _controllerUsername.text;
+                      var msg = signingIn(email, password, userName);
                       if (_formKey.currentState?.validate() ?? false) {
-                        // _boxAccounts.put(
-                        //   _controllerUsername.text,
-                        //   _controllerConFirmPassword.text,
-                        // );
-
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             width: 200,
@@ -194,7 +204,8 @@ class _SignupState extends State<Signup> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             behavior: SnackBarBehavior.floating,
-                            content: const Text("Registered Successfully"),
+                            content:
+                                Text("Mail send to ${email} for verification"),
                           ),
                         );
 
