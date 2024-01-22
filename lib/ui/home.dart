@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable, prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_const_constructors, unused_local_variable, prefer_interpolation_to_compose_strings, unnecessary_null_comparison, unrelated_type_equality_checks
 
 import 'dart:convert';
+import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -164,21 +165,28 @@ class _HomeState extends State<Home> {
                                           ),
                                           ElevatedButton(
                                               clipBehavior: Clip.hardEdge,
-                                              onPressed: () => Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return reviewScreen(
-                                                            ImdbId: movies[
-                                                                    position -
-                                                                        1]
-                                                                ["imdbId"]);
-                                                      },
-                                                    ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return reviewScreen(
+                                                          ImdbId:
+                                                              movies[position]
+                                                                  ["imdbId"]);
+                                                    },
                                                   ),
-                                              child: Text("Reviews: " +
-                                                  movies[position]["reviews"]
-                                                      .toString()))
+                                                );
+                                              },
+                                              child: Text("Reviews: "
+
+                                                  //         + movies[position]
+                                                  //             ["reviews"] ==
+                                                  //     [].toString()
+                                                  // ? "0"
+                                                  // : movies[position]
+                                                  //     ["reviews"]
+                                                  ))
                                         ],
                                       )
                                     ],

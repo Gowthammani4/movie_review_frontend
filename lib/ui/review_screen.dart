@@ -20,14 +20,16 @@ class _reviewScreenState extends State<reviewScreen> {
   @override
   void initState() {
     super.initState();
+    findReview(widget.ImdbId);
   }
 
   bool _loading = true;
   Future<void> findReview(String imdbId) async {
     String url =
-        "https://movie-review-3gg6.onrender.com/api/reviews/findByImdbId/${widget.ImdbId}";
-    final response = await http.get(Uri.parse(url));
+        "https://movie-review-3gg6.onrender.com/api/reviews/findByImdbId/${imdbId}";
+    final response = await http.post(Uri.parse(url));
     var responseData = jsonDecode(response.body);
+    print(responseData);
     List<Map<String, dynamic>> m = [];
     for (var i in responseData) {
       m.add(i);
@@ -46,34 +48,53 @@ class _reviewScreenState extends State<reviewScreen> {
         ? const Center(
             child: CircularProgressIndicator(color: Colors.redAccent),
           )
-        : ListView.builder(
-            itemCount: reviews.length,
-            itemBuilder: (context, position) {
-              return Card(
-                child: Column(children: [
-                  CircleAvatar(
-                    child: Text(
-                      reviews[position]["userId"][0],
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, color: Colors.black),
-                    ),
-                    backgroundColor: Colors
-                        .primaries[Random().nextInt(Colors.primaries.length)],
-                  ),
-                  Text(
-                    reviews[position]["userId"]!,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w300, fontSize: 14),
-                  ),
-                  Text(
-                    reviews[position]["body"]!,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 10,
-                        color: Colors.grey[800]),
-                  )
-                ]),
+        : reviews.isEmpty
+            ? const Center(
+                child: Text("No reviews to show"),
+              )
+            : Container(
+                padding: const EdgeInsets.all(10),
+                child: ListView.builder(
+                    itemCount: reviews.length,
+                    itemBuilder: (context, position) {
+                      return Card(
+                        child: Container(
+                          height: 100,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  child: Text(
+                                    reviews[position]["userId"][0],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black),
+                                  ),
+                                  backgroundColor: Colors.primaries[Random()
+                                      .nextInt(Colors.primaries.length)],
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      reviews[position]["userId"]!,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14),
+                                    ),
+                                    Text(
+                                      reviews[position]["body"]!,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 10,
+                                          color: Colors.grey[800]),
+                                    )
+                                  ],
+                                )
+                              ]),
+                        ),
+                      );
+                    }),
               );
-            });
   }
 }
