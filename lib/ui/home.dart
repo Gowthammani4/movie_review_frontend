@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable
+// ignore_for_file: prefer_const_constructors, unused_local_variable, prefer_interpolation_to_compose_strings
 
 import 'dart:convert';
 
@@ -166,7 +166,9 @@ class _HomeState extends State<Home> {
                                           ElevatedButton(
                                               clipBehavior: Clip.hardEdge,
                                               onPressed: null,
-                                              child: Text("Reviews"))
+                                              child: Text("Reviews: " +
+                                                  movies[position]["reviews"]
+                                                      .length))
                                         ],
                                       )
                                     ],
