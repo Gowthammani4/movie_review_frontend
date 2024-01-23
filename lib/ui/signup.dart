@@ -34,8 +34,7 @@ class _SignupState extends State<Signup> {
         body: json.encode(
             {"userName": userName, "email": email, "password": password}),
         headers: {'Content-Type': 'application/json'});
-    var responseData = jsonDecode(response.body);
-    print(responseData);
+    var responseData = response.body.toString();
     return "Success";
   }
 

@@ -32,10 +32,7 @@ class _LoginState extends State<Login> {
         body: json.encode({"email": email, "password": password}),
         headers: {'Content-Type': 'application/json'});
     var res = response.body.toString();
-    print(res.runtimeType);
-    print("Response: $res");
     if (res == "Success") {
-      print("condition true");
       return "success";
     }
     return "";
