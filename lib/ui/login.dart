@@ -130,8 +130,6 @@ class _LoginState extends State<Login> {
                       email = _controllerUsername.text;
                       password = _controllerPassword.text;
                       if (_formKey.currentState?.validate() ?? false) {
-                        print("password: $password");
-                        print(email);
                         var a = await loggingIn(email, password);
                         a == "success"
                             ? Navigator.pushReplacement(
