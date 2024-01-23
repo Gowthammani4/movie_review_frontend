@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unnecessary_null_comparison, use_build_context_synchronously
+// ignore_for_file: avoid_print, unnecessary_null_comparison, use_build_context_synchronously, unrelated_type_equality_checks
 
 import 'dart:convert';
 
@@ -31,9 +31,14 @@ class _LoginState extends State<Login> {
     final response = await http.post(Uri.parse(url),
         body: json.encode({"email": email, "password": password}),
         headers: {'Content-Type': 'application/json'});
-    var responseData = json.decode(response.body);
-    print(responseData);
-    return "success";
+    var res = response.body.toString();
+    print(res.runtimeType);
+    print("Response: $res");
+    if (res == "Success") {
+      print("condition true");
+      return "success";
+    }
+    return "";
   }
 
   @override
