@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:spring_boot_test/ownreview.dart';
 import 'package:spring_boot_test/ui/review_screen.dart';
 import 'package:spring_boot_test/ui/youtubeplayer.dart';
 
@@ -62,18 +63,31 @@ class _HomeState extends State<Home> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white),
               ),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const Login();
-                      },
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.logout_rounded),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ownreviewScreen();
+                      }));
+                    },
+                    icon: const Icon(Icons.person),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const Login();
+                          },
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.logout_rounded),
+                  ),
+                ],
               ),
             ),
           )

@@ -1,38 +1,35 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, camel_case_types, must_be_immutable, non_constant_identifier_names, sort_child_properties_last
 import 'dart:convert';
-import 'dart:math';
 
 import "package:http/http.dart" as http;
 
 import 'package:flutter/material.dart';
-import 'package:spring_boot_test/ui/addreview.dart';
 
-class reviewScreen extends StatefulWidget {
-  String ImdbId;
-
-  reviewScreen({required this.ImdbId, super.key});
+class ownreviewScreen extends StatefulWidget {
+  ownreviewScreen({super.key});
 
   @override
-  State<reviewScreen> createState() => _reviewScreenState();
+  State<ownreviewScreen> createState() => _ownreviewScreenState();
 }
 
-class _reviewScreenState extends State<reviewScreen> {
+class _ownreviewScreenState extends State<ownreviewScreen> {
   @override
   void initState() {
     super.initState();
-    findReview(widget.ImdbId);
+    _findReview();
   }
 
   bool _loading = true;
-  Future<void> findReview(String imdbId) async {
+  Future<void> _findReview() async {
     String url =
-        "https://movie-review-3gg6.onrender.com/api/reviews/findByImdbId/${imdbId}";
-    final response = await http.post(Uri.parse(url));
+        "https://movie-review-3gg6.onrender.com/api/reviews/userReviews";
+    final response = await http.get(Uri.parse(url));
     var responseData = jsonDecode(response.body);
     List<Map<String, dynamic>> m = [];
     for (var i in responseData) {
       m.add(i);
     }
+    print(m);
     setState(() {
       reviews = m;
       _loading = false;
@@ -48,20 +45,8 @@ class _reviewScreenState extends State<reviewScreen> {
             child: CircularProgressIndicator(color: Colors.redAccent),
           )
         : reviews.isEmpty
-            ? Column(
-                children: [
-                  const Center(
-                    child: Text("No reviews to show"),
-                  ),
-                  FloatingActionButton.large(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                addreview(imdb: widget.ImdbId))),
-                    child: const Icon(Icons.add),
-                  )
-                ],
+            ? const Center(
+                child: Text("No reviews to show"),
               )
             : Column(
                 children: [
@@ -78,16 +63,6 @@ class _reviewScreenState extends State<reviewScreen> {
                                       MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CircleAvatar(
-                                      child: Text(
-                                        reviews[position]["userId"][0],
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black),
-                                      ),
-                                      backgroundColor: Colors.primaries[Random()
-                                          .nextInt(Colors.primaries.length)],
-                                    ),
                                     Column(
                                       children: [
                                         Text(
@@ -110,14 +85,6 @@ class _reviewScreenState extends State<reviewScreen> {
                           );
                         }),
                   ),
-                  FloatingActionButton.large(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                addreview(imdb: widget.ImdbId))),
-                    child: const Icon(Icons.add),
-                  )
                 ],
               );
   }
