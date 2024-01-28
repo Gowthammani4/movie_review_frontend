@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spring_boot_test/ui/home.dart';
 import 'package:spring_boot_test/ui/login.dart';
 
 class MyApp extends StatelessWidget {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
       ),
-      home: const Login(),
+      home: Home(),
     );
   }
 }

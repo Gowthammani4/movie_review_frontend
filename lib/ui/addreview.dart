@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unnecessary_null_comparison, use_build_context_synchronously, unrelated_type_equality_checks
+// ignore_for_file: avoid_print, unnecessary_null_comparison, use_build_context_synchronously, unrelated_type_equality_checks, camel_case_types, must_be_immutable
 
 import 'dart:convert';
 
@@ -23,10 +23,11 @@ class _addreviewState extends State<addreview> {
   String reviewBody = "";
 
   Future<String> _sendreview(String reviewBody, String imdb) async {
-    String url = "https://movie-review-3gg6.onrender.com/api/review";
+    String url = "https://movie-review-3gg6.onrender.com/api/reviews";
     final response = await http.post(Uri.parse(url),
         body: json.encode({"reviewBody": reviewBody, "imdbId": imdb}),
         headers: {'Content-Type': 'application/json'});
+    print(response.body);
     var res = response.body.toString();
     if (res == "Success") {
       return "Success";

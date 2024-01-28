@@ -57,40 +57,34 @@ class _HomeState extends State<Home> {
         elevation: 0,
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white),
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ownreviewScreen();
-                      }));
-                    },
-                    icon: const Icon(Icons.person),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const Login();
-                          },
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.logout_rounded),
-                  ),
-                ],
-              ),
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ownreviewScreen();
+                    }));
+                  },
+                  icon: const Icon(Icons.person),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const Login();
+                        },
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.logout_rounded),
+                ),
+              ],
             ),
-          )
+          ),
         ],
       ),
       backgroundColor: Colors.black,
@@ -191,15 +185,7 @@ class _HomeState extends State<Home> {
                                                   ),
                                                 );
                                               },
-                                              child: Text("Reviews: "
-
-                                                  //         + movies[position]
-                                                  //             ["reviews"] ==
-                                                  //     [].toString()
-                                                  // ? "0"
-                                                  // : movies[position]
-                                                  //     ["reviews"]
-                                                  ))
+                                              child: Text("Reviews"))
                                         ],
                                       )
                                     ],

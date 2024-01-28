@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, camel_case_types, must_be_immutable, non_constant_identifier_names, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors_in_immutables, camel_case_types, must_be_immutable, non_constant_identifier_names, sort_child_properties_last, prefer_interpolation_to_compose_strings, unnecessary_brace_in_string_interps
 import 'dart:convert';
 import 'dart:math';
 
@@ -6,6 +6,8 @@ import "package:http/http.dart" as http;
 
 import 'package:flutter/material.dart';
 import 'package:spring_boot_test/ui/addreview.dart';
+
+import '../ownreview.dart';
 
 class reviewScreen extends StatefulWidget {
   String ImdbId;
@@ -24,16 +26,22 @@ class _reviewScreenState extends State<reviewScreen> {
   }
 
   bool _loading = true;
+  var currentUser;
   Future<void> findReview(String imdbId) async {
     String url =
         "https://movie-review-3gg6.onrender.com/api/reviews/findByImdbId/${imdbId}";
+    var currentUser_url = 'https://movie-review-3gg6.onrender.com/currentUser';
+
     final response = await http.post(Uri.parse(url));
+    final res = await http.get(Uri.parse(currentUser_url));
+    var resBody = jsonDecode(res.body);
     var responseData = jsonDecode(response.body);
     List<Map<String, dynamic>> m = [];
     for (var i in responseData) {
       m.add(i);
     }
     setState(() {
+      currentUser = resBody;
       reviews = m;
       _loading = false;
     });
@@ -43,82 +51,86 @@ class _reviewScreenState extends State<reviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _loading
-        ? const Center(
-            child: CircularProgressIndicator(color: Colors.redAccent),
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return addreview(imdb: widget.ImdbId);
+            })),
+            icon: Icon(Icons.add),
           )
-        : reviews.isEmpty
-            ? Column(
-                children: [
-                  const Center(
-                    child: Text("No reviews to show"),
-                  ),
-                  FloatingActionButton.large(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                addreview(imdb: widget.ImdbId))),
-                    child: const Icon(Icons.add),
-                  )
-                ],
-              )
-            : Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: ListView.builder(
-                        itemCount: reviews.length,
-                        itemBuilder: (context, position) {
-                          return Card(
-                            child: SizedBox(
-                              height: 100,
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CircleAvatar(
-                                      child: Text(
-                                        reviews[position]["userId"][0],
+        ],
+        title: const Text("Review Screen"),
+        elevation: 0,
+      ),
+      body: _loading
+          ? const Center(
+              child: CircularProgressIndicator(color: Colors.redAccent),
+            )
+          : reviews.isEmpty
+              ? const Center(
+                  child: Text("No reviews to show click + to add"),
+                )
+              : Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.all(10),
+                  child: ListView.builder(
+                      itemCount: reviews.length,
+                      itemBuilder: (context, position) {
+                        return Card(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          color: Colors.white,
+                          shadowColor: Colors.blueGrey,
+                          margin: const EdgeInsets.all(5),
+                          child: Container(
+                            height: 50,
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    child: Text(
+                                      reviews[position]["userId"][0],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                    ),
+                                    backgroundColor: Colors.primaries[Random()
+                                        .nextInt(Colors.primaries.length)],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        reviews[position]["userId"]!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w500,
-                                            color: Colors.black),
+                                            fontSize: 12),
                                       ),
-                                      backgroundColor: Colors.primaries[Random()
-                                          .nextInt(Colors.primaries.length)],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          reviews[position]["userId"]!,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 14),
-                                        ),
-                                        Text(
-                                          reviews[position]["body"]!,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 10,
-                                              color: Colors.grey[800]),
+                                      Text(
+                                        reviews[position]["body"]!,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                            color: Colors.grey[800]),
+                                      )
+                                    ],
+                                  ),
+                                  reviews[position]["userId"] ==
+                                          currentUser["userId"]
+                                      ? const IconButton(
+                                          onPressed: null,
+                                          icon: Icon(Icons.delete_outline))
+                                      : const SizedBox(
+                                          width: 2,
                                         )
-                                      ],
-                                    )
-                                  ]),
-                            ),
-                          );
-                        }),
-                  ),
-                  FloatingActionButton.large(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                addreview(imdb: widget.ImdbId))),
-                    child: const Icon(Icons.add),
-                  )
-                ],
-              );
+                                ]),
+                          ),
+                        );
+                      }),
+                ),
+    );
   }
 }
