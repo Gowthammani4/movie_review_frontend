@@ -5,7 +5,7 @@ import 'dart:math';
 import "package:http/http.dart" as http;
 
 import 'package:flutter/material.dart';
-import 'package:spring_boot_test/ui/addreview.dart';
+import '/ui/addreview.dart';
 
 class reviewScreen extends StatefulWidget {
   String ImdbId;

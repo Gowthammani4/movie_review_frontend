@@ -4,9 +4,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:spring_boot_test/ownreview.dart';
-import 'package:spring_boot_test/ui/review_screen.dart';
-import 'package:spring_boot_test/ui/youtubeplayer.dart';
+import '/ownreview.dart';
+import '/ui/review_screen.dart';
+import '/ui/youtubeplayer.dart';
 
 import 'login.dart';
 
@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login App"),
+        title: const Text("Home Page"),
         elevation: 0,
         actions: [
           Padding(
@@ -125,6 +125,9 @@ class _HomeState extends State<Home> {
                                 Container(
                                   child: Column(
                                     children: [
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                       Text(
                                         movies[position]["title"],
                                         style: const TextStyle(
@@ -135,23 +138,44 @@ class _HomeState extends State<Home> {
                                       const SizedBox(
                                         width: 20,
                                       ),
-                                      Text(
-                                        movies[position]["genres"].toString(),
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Genre: ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
+                                          ),
+                                          Text(
+                                            movies[position]["genres"]
+                                                .toString(),
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      Text(
-                                          movies[position]["releaseDate"]
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.black,
-                                              fontSize: 12)),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Release_Date: ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
+                                          ),
+                                          Text(
+                                              movies[position]["releaseDate"]
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.black,
+                                                  fontSize: 12)),
+                                        ],
+                                      ),
                                       SizedBox(
                                         height: 20,
                                       ),
