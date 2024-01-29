@@ -7,8 +7,6 @@ import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 import 'package:spring_boot_test/ui/addreview.dart';
 
-import '../ownreview.dart';
-
 class reviewScreen extends StatefulWidget {
   String ImdbId;
 
@@ -27,6 +25,14 @@ class _reviewScreenState extends State<reviewScreen> {
 
   bool _loading = true;
   var currentUser;
+
+  Future<void> deleteReview(String imdbId) async {
+    String url =
+        "https://movie-review-3gg6.onrender.com/api/reviews/delete/${imdbId}";
+    var response = await http.delete(Uri.parse(url));
+    print(response);
+  }
+
   Future<void> findReview(String imdbId) async {
     String url =
         "https://movie-review-3gg6.onrender.com/api/reviews/findByImdbId/${imdbId}";
@@ -59,7 +65,7 @@ class _reviewScreenState extends State<reviewScreen> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
               return addreview(imdb: widget.ImdbId);
             })),
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
           )
         ],
         title: const Text("Review Screen"),
@@ -70,66 +76,74 @@ class _reviewScreenState extends State<reviewScreen> {
               child: CircularProgressIndicator(color: Colors.redAccent),
             )
           : reviews.isEmpty
-              ? const Center(
-                  child: Text("No reviews to show click + to add"),
+              ? RefreshIndicator(
+                  onRefresh: () => findReview(widget.ImdbId),
+                  child: const Center(
+                    child: Text("No reviews to show click + to add"),
+                  ),
                 )
-              : Container(
-                  color: Colors.black,
-                  padding: const EdgeInsets.all(10),
-                  child: ListView.builder(
-                      itemCount: reviews.length,
-                      itemBuilder: (context, position) {
-                        return Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: Colors.white,
-                          shadowColor: Colors.blueGrey,
-                          margin: const EdgeInsets.all(5),
-                          child: Container(
-                            height: 50,
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  CircleAvatar(
-                                    child: Text(
-                                      reviews[position]["userId"][0],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black),
-                                    ),
-                                    backgroundColor: Colors.primaries[Random()
-                                        .nextInt(Colors.primaries.length)],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        reviews[position]["userId"]!,
+              : RefreshIndicator(
+                  onRefresh: () => findReview(widget.ImdbId),
+                  child: Container(
+                    color: Colors.black,
+                    padding: const EdgeInsets.all(10),
+                    child: ListView.builder(
+                        itemCount: reviews.length,
+                        itemBuilder: (context, position) {
+                          return Card(
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            color: Colors.white,
+                            shadowColor: Colors.blueGrey,
+                            margin: const EdgeInsets.all(5),
+                            child: SizedBox(
+                              height: 50,
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      child: Text(
+                                        reviews[position]["userId"][0],
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 12),
+                                            color: Colors.black),
                                       ),
-                                      Text(
-                                        reviews[position]["body"]!,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14,
-                                            color: Colors.grey[800]),
-                                      )
-                                    ],
-                                  ),
-                                  reviews[position]["userId"] ==
-                                          currentUser["userId"]
-                                      ? const IconButton(
-                                          onPressed: null,
-                                          icon: Icon(Icons.delete_outline))
-                                      : const SizedBox(
-                                          width: 2,
+                                      backgroundColor: Colors.primaries[Random()
+                                          .nextInt(Colors.primaries.length)],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          reviews[position]["userId"]!,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12),
+                                        ),
+                                        Text(
+                                          reviews[position]["body"]!,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
+                                              color: Colors.grey[800]),
                                         )
-                                ]),
-                          ),
-                        );
-                      }),
+                                      ],
+                                    ),
+                                    reviews[position]["userId"] ==
+                                            currentUser["userId"]
+                                        ? IconButton(
+                                            onPressed: () =>
+                                                deleteReview(widget.ImdbId),
+                                            icon: const Icon(
+                                                Icons.delete_outline))
+                                        : const SizedBox(
+                                            width: 2,
+                                          )
+                                  ]),
+                            ),
+                          );
+                        }),
+                  ),
                 ),
     );
   }

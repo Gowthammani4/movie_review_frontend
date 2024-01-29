@@ -145,6 +145,16 @@ class _HomeState extends State<Home> {
                                       SizedBox(
                                         height: 20,
                                       ),
+                                      Text(
+                                          movies[position]["releaseDate"]
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black,
+                                              fontSize: 12)),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
