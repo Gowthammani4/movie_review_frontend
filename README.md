@@ -1,16 +1,11 @@
-# spring_boot_test
+# Movie review Application frontend
+## [Movie review_Application_Backend](https://github.com/Gowthammani4/movie_review)
 
-A new Flutter project.
+## Login Page
+![login page](https://github.com/Gowthammani4/movie_review_frontend/assets/88430577/80983de7-ed68-4453-bcda-e404439edf64)
 
-## Getting Started
+## SignupPage
+![SignUp page](https://github.com/Gowthammani4/movie_review_frontend/assets/88430577/07fa390d-de89-4d3e-a390-7bc4b674f1ea)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Home Page
+![Home page](https://github.com/Gowthammani4/movie_review_frontend/assets/88430577/c1639b7d-f69a-498e-ba8b-d2170a7dba3a)
